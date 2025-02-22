@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="signup-container">
+    <h2>Sign Up</h2>
+    <form id="signup-form">
+      <input type="text" id="signup-name" placeholder="Full Name" required /><br />
+      <input type="email" id="signup-email" placeholder="Email" required /><br />
+      <input type="password" id="signup-password" placeholder="Password" required /><br />
+      <button type="submit">Sign Up</button>
+    </form>
+    <p id="signup-error-message"></p>
+    <p>
+      Already have an account?
+      <a href="login.html">Login</a>
+    </p>
+  </div>
+
+  <!-- Firebase and Signup Script 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyAq9DFcu0wQFlx_A29eMToxfa6_ZIfe8V8",
+      authDomain: "login-signup-d0cb0.firebaseapp.com",
+      projectId: "login-signup-d0cb0",
+      storageBucket: "login-signup-d0cb0.firebasestorage.app",
+      messagingSenderId: "438094614420",
+      appId: "1:438094614420:web:65db32c93def3c69884981",
+      measurementId: "G-DRDW3W1C8F"
+};
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+  -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+  
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAq9DFcu0wQFlx_A29eMToxfa6_ZIfe8V8",
+      authDomain: "login-signup-d0cb0.firebaseapp.com",
+      projectId: "login-signup-d0cb0",
+      storageBucket: "login-signup-d0cb0.firebasestorage.app",
+      messagingSenderId: "438094614420",
+      appId: "1:438094614420:web:65db32c93def3c69884981",
+      measurementId: "G-DRDW3W1C8F"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);  // Add this line
+    const db = getFirestore(app);
+  
+    // Signup form submission
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById("signup-name").value;
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+  
+      try {
+        // Create a new user with email and password
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+  
+        // Save additional user data in Firestore
+        console.log("Saving user data:", fullName, email);  // Log data for debugging
+        await setDoc(doc(db, "users", user.uid), {
+          name: fullName,
+          email: email,
+          createdAt: new Date()
+        });
+  
+        alert("Signup successful! Please log in.");
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Error signing up:", error);  // More detailed error logging
+        document.getElementById("signup-error-message").textContent = error.message;
+      }
+    });
+  </script>
+  
+</body>
+</html>
